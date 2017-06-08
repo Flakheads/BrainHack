@@ -54,5 +54,18 @@ run s x         = run s (bf s x)
 first :: (a,b,c) -> a
 first (a,_,_) = a
 
+bl :: [Char] -> [Char] -> Bool
+bl [] [] = True
+bl [] _  = False
+bl ('(':x) y   = bl x (')':y) 
+bl ('[':x) y   = bl x (']':y) 
+bl ('<':x) y   = bl x ('>':y) 
+bl ('{':x) y   = bl x ('}':y) 
+bl  _ [] = False
+bl (a:x) (b:y) = (a == b) && (bl x y)
+
+balanced :: [Char] -> Bool
+balanced x = bl [a|a <- x, elem a "()[]<>{}"] []
+
 brainflak :: [Char] -> [Integer] -> [Integer]
-brainflak s x = first (bf s (x,[],[]))
+brainflak s x = if (balanced s) then (first (bf s (x,[],[]))) else (error "Unbalanced braces.")
