@@ -29,7 +29,6 @@ ex  (a:x)  y = ex x y
 exterior :: [Char] -> [Char]
 exterior x = ex x 1
 
-
 bf :: [Char] -> ([Integer],[Integer],[Integer]) -> ([Integer],[Integer],[Integer])
 bf []          (x,y,z)= (x,y,z)
 bf ('(':')':a) (x,y,z)= bf a (x,y,((pop z+1):rest z))
@@ -43,7 +42,7 @@ bf (')':a) (x,y,(h:z))= bf a ((h:x),y,(topadd z h))
 bf (']':a) (x,y,(h:z))= bf a (x,y,(topadd z (-h)))
 bf ('>':a) (x,y,(_:z))= bf a (x,y,z)
 bf ('{':a)      t     = bf (exterior a) (run (interior a) t)
-bf (_:a) t = bf a t
+bf (_:a)        t     = bf a t
 
 run :: [Char] -> ([Integer],[Integer],[Integer]) -> ([Integer],[Integer],[Integer])
 run s ([],y,z)  = ([],y,z)
@@ -65,7 +64,10 @@ bl  _ [] = False
 bl (a:x) (b:y) = (a == b) && (bl x y)
 
 balanced :: [Char] -> Bool
-balanced x = bl [a|a <- x, elem a "()[]<>{}"] []
+balanced x = bl x []
 
 brainflak :: [Char] -> [Integer] -> [Integer]
-brainflak s x = if (balanced s) then (first (bf s (x,[],[]))) else (error "Unbalanced braces.")
+brainflak s x
+ | balanced source = first (bf source (x,[],[]))
+ | otherwise  = error "Unbalanced braces."
+ where source = [a|a <- s, elem a "()[]<>{}"]
