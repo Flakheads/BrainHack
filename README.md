@@ -13,3 +13,12 @@ To run a Brain-Flak program call the resulting binaries with the name of the fil
 Example:
 
     $ ./BrainHack source.flk 1 3 6
+
+## Special to BrainHack
+
+Here are some things that are present in the BrainHack interpreter but might not be present in other interpreters.
+
+### Comments
+
+BrainHack uses `#{...}` for comments.  BrainHack *requires* braces to be balanced inside of comments.
+

@@ -59,14 +59,24 @@ bl ('(':x) y   = bl x (')':y)
 bl ('[':x) y   = bl x (']':y) 
 bl ('<':x) y   = bl x ('>':y) 
 bl ('{':x) y   = bl x ('}':y) 
-bl  _ [] = False
-bl (a:x) (b:y) = (a == b) && (bl x y)
+bl  (a:x) []
+ | elem a ")]>}" = False
+ | otherwise     = bl x []
+bl (a:x) (b:y)
+ | elem a ")]>}" = (a == b) && (bl x y)
+ | otherwise     = bl x (b:y)
 
 balanced :: [Char] -> Bool
 balanced x = bl x []
 
+clean :: [Char] -> [Char]
+clean [] = []
+clean ('#':'{':xs) = clean (exterior xs)
+clean (x:xs)
+ | elem x "()[]<>{}" = x:(clean xs)
+ | otherwise         = clean xs
+
 brainflak :: [Char] -> [Integer] -> [Integer]
 brainflak s x
- | balanced source = (\(a,_,_) -> a) (bf source (x,[],[]))
+ | balanced s = (\(a,_,_) -> a) (bf (clean s) (x,[],[]))
  | otherwise  = error "Unbalanced braces."
- where source = [a|a <- s, elem a "()[]<>{}"]
