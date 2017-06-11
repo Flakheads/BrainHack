@@ -1,6 +1,7 @@
 import Interpreter
 import System.Environment
 import Data.List
+import Data.Char
 
 version :: String
 version = "BrainHack 0.0"
@@ -20,15 +21,28 @@ parseFlags [] a = a
 parseFlags (('-':'-':x):xs) a = parseFlags xs (x:a)
 parseFlags (('-':x):xs)     a = parseFlags xs ((split x) ++ a)
 
+processInput :: [String] -> [Integer]
+processInput (('"':ys):xs)
+ | (last ys) == '"' = map (toInteger.ord) (init ys)
+ | otherwise = error "Invalid input"
+processInput (('\'':ys):xs)
+ | (last ys) == '\'' = map (toInteger.ord) (init ys)
+ | otherwise = error "Invaid input"
+processInput x = [read a :: Integer | a <- x]
+
 helpMenu :: String
 helpMenu = unlines ["",
   "Brain-Flak Haskell Interpreter",
   "Usage:",
   "\tBrainHack [options] source_file args...",
   "",
+  "   -a, --ascii-out\t\tOutputs as ascii character codes.",
   "   -e, --execute\t\tExecutes the first commandline argument as Brain-Flak code.",
   "   -h, --help\t\t\tPrints this menu and exits.",
-  "   -v, --version\t\tPrints the version number of the interpreter and exits"]
+  "   -v, --version\t\tPrints the version number of the interpreter and exits."]
+
+displayInteger :: Integer -> String
+displayInteger x = show x ++ " "
 
 main :: IO ()
 main = do 
@@ -47,7 +61,8 @@ main = do
                (readFile (head args))
              )
            )
+ let formatOutput = if (elem "a" flags)||(elem "ascii-out" flags) then (\x -> (chr.fromInteger) x:[]) else displayInteger
  putStr$ if exiting then
            "" 
          else 
-           (concat (intersperse " " (map show(brainflak source [read x :: Integer|x <- (tail args)]))))
+           (concat (map formatOutput (brainflak source (processInput (tail args)))))

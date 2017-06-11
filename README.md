@@ -22,3 +22,8 @@ Here are some things that are present in the BrainHack interpreter but might not
 
 BrainHack uses `#{...}` for comments.  BrainHack *requires* braces to be balanced inside of comments.
 
+### ASCII input
+
+BrainHack will automatically use ASCII input if you format your input as a string.  For example
+
+    $BrainHack -e "({}())" '"String"'
