@@ -4,17 +4,12 @@ BrainHack is a Haskell implementation of the Brain-Flak language.
 
 ## Running BrainHack
 
-Currently you can run BrainHack via ghci, using the function `brainflak`.  This function 
-takes a `String` representing the source code and a `[Integer]` of input.  It will output
-a `[Integer]` for output.
+BrainHack can be run by compiling and running `BrainHack.hs`.  This can be compiled with ghc:
 
----
+    $ ghc BrainHack.hs
 
-Example execution:
+To run a Brain-Flak program call the resulting binaries with the name of the file where the source is located and the arguments for the program.
 
-    $ ghci BrainHack.hs
-    GHCi, version 8.0.1: http://www.haskell.org/ghc/  :? for help
-    [1 of 1] Compiling Main             ( BrainHack.hs, interpreted )
-    Ok, modules loaded: Main.
-    *Main> brainflak "({({})({}[()])}{})" [9]
-    [81]
+Example:
+
+    $ ./BrainHack source.flk 1 3 6
