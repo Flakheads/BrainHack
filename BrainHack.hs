@@ -1,4 +1,5 @@
 import Interpreter
+import MiniInterpreter
 import System.Environment
 import Data.List
 import Data.Char
@@ -39,7 +40,9 @@ helpMenu = unlines ["",
   "   -a, --ascii-out\t\tOutputs as ascii character codes.",
   "   -e, --execute\t\tExecutes the first commandline argument as Brain-Flak code.",
   "   -h, --help\t\t\tPrints this menu and exits.",
-  "   -v, --version\t\tPrints the version number of the interpreter and exits."]
+  "   -m, --mini\t\t\tRun in an interpreter optimized for miniflak,",
+  "   -v, --version\t\tPrints the version number of the interpreter and exits.",
+  "   -x, --cycles\t\t\tPrints the number of cycles elapsed upon termination."]
 
 displayInteger :: Integer -> String
 displayInteger x = show x ++ " "
@@ -62,7 +65,9 @@ main = do
              )
            )
  let formatOutput = if (elem "a" flags)||(elem "ascii-out" flags) then (\x -> (chr.fromInteger) x:[]) else displayInteger
- putStr$ if exiting then
-           "" 
-         else 
-           (concat (map formatOutput (brainflak source (processInput (tail args)))))
+ let cycles = (elem "x" flags)||(elem "cycles" flags)
+ putStr$ (if exiting then
+           ""
+          else
+           (\ (a,b) -> (concat (map formatOutput a)) ++ (if cycles then ("\nCycles: " ++ show b) else "")) (if (elem "m" flags)||(elem "mini" flags) then (miniflak source (processInput (tail args)) cycles) else (brainflak source (processInput (tail args)) cycles))
+          )
