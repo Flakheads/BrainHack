@@ -62,7 +62,12 @@ main = do
              )
            )
  let formatOutput = if (elem "a" flags)||(elem "ascii-out" flags) then (\x -> (chr.fromInteger) x:[]) else displayInteger
+ let result = (brainflak source (processInput (tail args)))
  putStr$ if exiting then
            "" 
          else 
-           (concat (map formatOutput (brainflak source (processInput (tail args)))))
+           (concat (map formatOutput (lstack result)))
+ putStr$ if (elem "x" flags)||(elem "cycles" flags) then
+           ("\n" ++ show (cycles result) ++ "\n")
+         else
+           ""
