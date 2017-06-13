@@ -6,7 +6,6 @@ bf :: [Char] -> ([Integer],[Integer]) -> ([Integer],[Integer])
 bf []          (x,z)= (x,z)
 bf ('(':')':a) (x,z)= bf a (x,((pop z+1):rest z))
 bf ('{':'}':a) (x,z)= bf a ((rest x),(topadd z (pop x)))
-bf ('[':']':a) (x,z)= bf a (x,(topadd z (toInteger (length x))))
 bf ('(':a)     (x,z)= bf a (x,(0:z))
 bf ('[':a)     (x,z)= bf a (x,(0:z))
 bf (')':a) (x,(h:z))= bf a ((h:x),(topadd z h))
@@ -23,10 +22,9 @@ run s x         = run s (bf s x)
 
 xbf :: [Char] -> ([Integer],[Integer],Int) -> ([Integer],[Integer],Int)
 xbf _ (_,_,c) | c `seq` False = undefined
-xbf []          (x,z,c)= (x,z,c+1)
+xbf []          (x,z,c)= (x,z,c)
 xbf ('(':')':a) (x,z,c)= xbf a (x,((pop z+1):rest z),c+1)
 xbf ('{':'}':a) (x,z,c)= xbf a ((rest x),(topadd z (pop x)),c+1)
-xbf ('[':']':a) (x,z,c)= xbf a (x,(topadd z (toInteger (length x))),c+1)
 xbf ('(':a)     (x,z,c)= xbf a (x,(0:z),c+1)
 xbf ('[':a)     (x,z,c)= xbf a (x,(0:z),c+1)
 xbf (')':a) (x,(h:z),c)= xbf a ((h:x),(topadd z h),c+1)
@@ -37,7 +35,7 @@ xbf (_:a)        t     = xbf a t
 xrun :: [Char] -> ([Integer],[Integer],Int) -> ([Integer],[Integer],Int)
 xrun s ([],z,c)  = ([],z,c)
 xrun s (0:x,z,c) = (0:x,z,c)
-xrun s x         = xrun s (xbf s x)
+xrun s (x,z,c)   = xrun s (xbf s (x,z,c+2))
 
 bl :: [Char] -> [Char] -> Bool
 bl [] [] = True
