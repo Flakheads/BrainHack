@@ -43,8 +43,8 @@ xbf ('{':a)      t     = xbf (exterior a) (xrun (interior a) t)
 xbf (_:a)        t     = xbf a t
 
 xrun :: [Char] -> ([Integer],[Integer],[Integer],Int) -> ([Integer],[Integer],[Integer],Int)
-xrun s ([],y,z,c)  = ([],y,z,c)
-xrun s (0:x,y,z,c) = (0:x,y,z,c)
+xrun s ([],y,z,c)  = ([],y,z,c+2)
+xrun s (0:x,y,z,c) = (0:x,y,z,c+2)
 xrun s (x,y,z,c)   = xrun s (xbf s (x,y,z,c+2))
 
 bl :: [Char] -> [Char] -> Bool
