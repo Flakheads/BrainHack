@@ -24,12 +24,13 @@ parseFlags (('-':x):xs)     a = parseFlags xs ((split x) ++ a)
 
 processInput :: [String] -> [Integer]
 processInput (('"':ys):xs)
- | (last ys) == '"' = map (toInteger.ord) (init ys)
+ | (last ys) == '"' = (map (toInteger.ord) (init ys))++processInput xs
  | otherwise = error "Invalid input"
 processInput (('\'':ys):xs)
- | (last ys) == '\'' = map (toInteger.ord) (init ys)
- | otherwise = error "Invaid input"
-processInput x = [read a :: Integer | a <- x]
+ | (last ys) == '\'' = (map (toInteger.ord) (init ys))++processInput xs
+ | otherwise = error "Invalid input"
+processInput (x:xs) = (read x :: Integer):processInput xs
+processInput [] = []
 
 helpMenu :: String
 helpMenu = unlines ["",
