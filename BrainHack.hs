@@ -6,7 +6,7 @@ import Data.List
 import Data.Char
 
 version :: String
-version = "BrainHack 0.0"
+version = "BrainHack 1.0"
 
 isFlag :: String -> Bool
 isFlag ('-':c:x)
@@ -56,7 +56,7 @@ helpMenu = unlines ["",
   "Usage:",
   "\tBrainHack [options] source_file args...",
   "",
-  "   -a, --ascii-out\t\tOutputs as ascii character codes.",
+  "   -A, --ascii-out\t\tOutputs as ascii character codes.",
   "   -d, --debug\t\t\tEnters into Debug mode.",
   "   -e, --execute\t\tExecutes the first commandline argument as Brain-Flak code.",
   "   -f, --file\t\t\tInput is read from file instead of commandline.  (Provide the filename as the last argument instead of input)",
@@ -102,7 +102,7 @@ main = do
                (readFile (head args)) --TODO ensure head
              )
            )
- let formatOutput = if (elem "a" flags)||(elem "ascii-out" flags) then (\x -> (chr.fromInteger) x:[]) else displayInteger
+ let formatOutput = if (elem "A" flags)||(elem "ascii-out" flags) then (\x -> (chr.fromInteger) x:[]) else displayInteger
  let cycles = (elem "x" flags)||(elem "cycles" flags)
  input <- if ((elem "f" flags)||(elem "file" flags)) then (do file <- readFile$ last args; return $ parseFile file) else (return$ tail args)
  (if exiting then
